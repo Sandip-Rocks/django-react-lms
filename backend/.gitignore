@@ -1,0 +1,41 @@
+# Byte-compiled / compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+*.egg-info/
+
+# Django migrations
+*/migrations/* 
+!*/migrations/__init__.py
+
+# Media and static files
+/media/
+staticfiles/
+
+# Logs and local settings
+*.log
+local_settings.py
+.env
+
+# Database and cache
+db.sqlite3
+*.sqlite3
+*.db
+*.cache
+
+# VSCode & JetBrains
+.vscode/
+.idea/
+
+# PyCharm
+*.iml
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Docker & deployment
+docker-compose.override.yml
