@@ -5,9 +5,10 @@ from api import serializers as api_serializers
 from userauths.models import User
 
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.response import Response
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -43,3 +44,23 @@ class PasswordResetEmailVerifyAPIView(generics.RetrieveAPIView):
             link = f"http://localhost:5173/create-new-password/?otp={user.otp}&uuidb64={uuidb64}&refresh_token={refresh_token}"
             print(link)
         return user
+
+
+class PasswordChanegeAPIView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = api_serializers.UserSerializers
+
+    def create(self, request, *args, **kwargs):
+        payload = request.data
+        otp = payload['otp']
+        uuidb64 = payload['uuidb64']
+        password = payload['password']
+
+        user = user.objects.get(id=uuidb64, otp=otp)
+        if user:
+            user.set_password(password)
+            user.otp = ''
+            user.save()
+            return Response({"message": "Password changed successfully"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
